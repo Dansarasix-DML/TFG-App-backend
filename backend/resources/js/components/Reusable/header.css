@@ -1,0 +1,29 @@
+.main-header {
+    display: flex;
+    justify-content: center;
+
+    padding: 60px 0;
+}
+
+.main-header-title-section {
+    border:  5px solid #ED1B24;
+    border-left: none;
+    border-right: none;
+
+    width: 80vw;
+    /* padding: 20px 0; */
+
+    text-align: center;
+}
+
+.main-header-title-section h1 {
+    color: #ED1B24;
+
+    font-size: 80px;
+    letter-spacing: 80px;
+}
+
+.main-header-title-section h1 span {
+    font-size: 100px;
+    line-height: 0;
+}

@@ -1,0 +1,14 @@
+
+footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: brown !important;
+    color: white !important;
+    border-top: solid red !important;
+}
+
+footer>h2{
+    font-size: xxx-large;
+    margin: 2% 0%;
+}
