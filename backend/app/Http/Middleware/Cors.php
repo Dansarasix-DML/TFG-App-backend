@@ -15,10 +15,12 @@ class Cors
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request)
+        $response = $next($request);
+
+        return $response
             ->header('Access-Control-Allow-Origin', $request->headers->get('Origin'))
             ->header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Accept')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-
     }
+
 }
