@@ -17,13 +17,13 @@ use App\Mail\NewPost;
 class BlogController extends Controller
 {
     public function lastBlogs() {
-        $blogs = Blog::select('blogs.id', 
-            \DB::raw('substring(blogs.title,1,30) as title'), 
-            'blogs.slug', 
-            'blogs.description', 
-            'blogs.blogger', 
-            'blogs.profile_img', 
-            'blogs.banner_img', 
+        $blogs = Blog::select('blogs.id',
+            \DB::raw('substring(blogs.title,1,30) as title'),
+            'blogs.slug',
+            'blogs.description',
+            'blogs.blogger',
+            'blogs.profile_img',
+            'blogs.banner_img',
             'users.name',
             'users.username'
         )
@@ -36,13 +36,13 @@ class BlogController extends Controller
     }
 
     public function getBlogInfo($blogSlug) {
-        $blog = Blog::select('blogs.id', 
-                \DB::raw('substring(blogs.title,1,30) as title'), 
-                'blogs.slug', 
-                'blogs.description', 
-                'blogs.blogger', 
-                'blogs.profile_img', 
-                'blogs.banner_img', 
+        $blog = Blog::select('blogs.id',
+                \DB::raw('substring(blogs.title,1,30) as title'),
+                'blogs.slug',
+                'blogs.description',
+                'blogs.blogger',
+                'blogs.profile_img',
+                'blogs.banner_img',
                 'users.name as user_name',
                 'users.username as user_username'
             )->join('users', 'blogs.blogger', '=', 'users.id')
@@ -54,13 +54,13 @@ class BlogController extends Controller
 
     public function getBlogs() {
 
-        $blogs = Blog::select('blogs.id', 
-            \DB::raw('substring(blogs.title,1,30) as title'), 
-            'blogs.slug', 
-            'blogs.description', 
-            'blogs.blogger', 
-            'blogs.profile_img', 
-            'blogs.banner_img', 
+        $blogs = Blog::select('blogs.id',
+            \DB::raw('substring(blogs.title,1,30) as title'),
+            'blogs.slug',
+            'blogs.description',
+            'blogs.blogger',
+            'blogs.profile_img',
+            'blogs.banner_img',
             'users.name as blogger_name',
             'users.username as blogger_username'
         )
@@ -108,23 +108,23 @@ class BlogController extends Controller
 
     public function lastPostsIndex() {
         $posts = Post::select(
-            'posts.id', 
-            \DB::raw('substring(posts.title,1,50) as title'), 
-            \DB::raw('substring(posts.subtitle,1,50) as subtitle'), 
-            'posts.slug', 
-            'posts.banner_img', 
-            'posts.content', 
-            'posts.summary', 
-            'posts.blog_id', 
-            \DB::raw('substring(b.title,1,20) as blog_title'), 
-            \DB::raw('substring(b.slug,1,200) as blog_slug'), 
+            'posts.id',
+            \DB::raw('substring(posts.title,1,50) as title'),
+            \DB::raw('substring(posts.subtitle,1,50) as subtitle'),
+            'posts.slug',
+            'posts.banner_img',
+            'posts.content',
+            'posts.summary',
+            'posts.blog_id',
+            \DB::raw('substring(b.title,1,20) as blog_title'),
+            \DB::raw('substring(b.slug,1,200) as blog_slug'),
             'b.profile_img as blog_img'
         )
         ->orderBy('posts.updated_at', 'desc')
         ->take(6)
         ->join('blogs as b', 'posts.blog_id', '=', 'b.id')
         ->get();
-    
+
         return $posts;
     }
 
@@ -146,35 +146,35 @@ class BlogController extends Controller
     public function lastPostsByBlogSlug($blogSlug) {
         // Primero, obtenemos el blog basado en el slug
         $blog = Blog::where('slug', $blogSlug)->first();
-    
+
         // Si no se encuentra el blog, devolvemos null o manejamos el error según sea necesario
         if (!$blog) {
             return null;
         }
-    
+
         // Ahora, seleccionamos los posts de ese blog con los campos específicos y limitamos la cantidad de resultados
         $posts = Post::select(
-                'posts.id', 
-                \DB::raw('substring(posts.title,1,50) as title'), 
-                \DB::raw('substring(posts.subtitle,1,50) as subtitle'), 
-                'posts.slug', 
-                'posts.banner_img', 
-                'posts.content', 
-                'posts.blog_id', 
-                \DB::raw('substring(b.title,1,20) as blog_title'), 
+                'posts.id',
+                \DB::raw('substring(posts.title,1,50) as title'),
+                \DB::raw('substring(posts.subtitle,1,50) as subtitle'),
+                'posts.slug',
+                'posts.banner_img',
+                'posts.content',
+                'posts.blog_id',
+                \DB::raw('substring(b.title,1,20) as blog_title'),
                 'b.profile_img as blog_img'
             )
             ->where('posts.blog_id', $blog->id)
             ->join('blogs as b', 'posts.blog_id', '=', 'b.id')
             ->orderBy('posts.created_at', 'desc')
             ->get();
-    
+
         return $posts;
     }
 
     public function getGames($blogSlug) {
         $blog = Blog::where('slug', $blogSlug)->first();
-        
+
         $games = $blog->products()->leftJoin('products_types', 'products.type_id', '=', 'products_types.id')
         ->select('products.*', 'products_types.name as typeName')->where('products_types.name', '!=', 'merchandising')
         ->orderBy('products.created_at', 'desc')->get();
@@ -184,7 +184,7 @@ class BlogController extends Controller
 
     public function getMerch($blogSlug) {
         $blog = Blog::where('slug', $blogSlug)->first();
-        
+
         $merch = $blog->products()->leftJoin('products_types', 'products.type_id', '=', 'products_types.id')
         ->select('products.*', 'products_types.name as typeName')->where('products_types.name', '=', 'merchandising')
         ->orderBy('products.created_at', 'desc')->get();
@@ -200,11 +200,11 @@ class BlogController extends Controller
         $blogger = $blog->bloggers()->first();
 
         $comments = $post->comments()->leftJoin('users', 'comments.user_id', '=', 'users.id')
-            ->select('comments.*', 'users.name as user_name', 'users.username as user_username', 
+            ->select('comments.*', 'users.name as user_name', 'users.username as user_username',
             'users.avatar as user_avatar')->orderBy('comments.created_at', 'desc')->get();
 
         return compact('blogger', 'post', 'comments');
-        
+
     }
 
     public function userBlogs() {
@@ -212,11 +212,11 @@ class BlogController extends Controller
         $user = auth()->user();
 
         $blogs = Blog::select(
-                'blogs.id', 
-                \DB::raw('substring(blogs.title, 1, 50) as title'), 
-                'blogs.slug', 
-                'blogs.profile_img', 
-                'blogs.banner_img', 
+                'blogs.id',
+                \DB::raw('substring(blogs.title, 1, 50) as title'),
+                'blogs.slug',
+                'blogs.profile_img',
+                'blogs.banner_img',
             )
             ->where('blogs.blogger', $user->id)
             ->get();
@@ -225,9 +225,9 @@ class BlogController extends Controller
     }
 
     public function addBlog(Request $request) {
-        
+        dd(auth()->user());
         $user = auth()->user();
-        
+
         $request['blogger'] = $user->id;
 
         $blog = new Blog;
@@ -262,7 +262,7 @@ class BlogController extends Controller
         } else {
             $blog->banner_img = $request->input('banner_img');
         }
-        
+
         // Verifica si 'profile_img' está presente en el request y no es nulo
         if ($request->hasFile('profile_img')) {
             // Verifica si 'profile_img' es un array y obtiene el primer archivo
@@ -288,7 +288,7 @@ class BlogController extends Controller
             }
         } else {
             $blog->profile_img = $request->input('profile_img');
-        }     
+        }
 
         $blog->save();
 
@@ -305,7 +305,7 @@ class BlogController extends Controller
     }
 
     public function editBlog(Request $request) {
-        
+
         $blog = Blog::where('id', $request->id)->first();
 
         $blog->title = $request->input('title');
@@ -328,7 +328,7 @@ class BlogController extends Controller
     // -------------------------------------------------------------------
 
     public function addPost(Request $request, $blogSlug) {
-        
+
         $blog = new Post;
         $blog->title = $request->input('title');
         $blog->subtitle = $request->input('subtitle');
@@ -377,7 +377,7 @@ class BlogController extends Controller
     }
 
     public function editPost(Request $request) {
-        
+
         $post = Post::where('id', $request->id)->first();
 
         $post->title = $request->input('title');
@@ -405,9 +405,9 @@ class BlogController extends Controller
         if (!is_null($userId)) {
             $userId = $userId->id;
         } else {
-            return response()->json(['error' => 'Unauthenticated.'], 401); 
+            return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-        
+
         $comment = new Comment;
         $comment->user_id = $userId;
         $comment->content = $request->input('content');
