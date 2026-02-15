@@ -16,9 +16,9 @@ class Cors
     public function handle(Request $request, Closure $next): Response
     {
         return $next($request)
-            ->header('Access-Control-Allow-Origin', 'https://gameverse-app.vercel.app')
-            // ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-            // ->header('Access-Control-Allow-Origin', 'http://localhost:3001')
+            ->header('Access-Control-Allow-Origin', $request->headers->get('Origin'))
+            ->header('Access-Control-Allow-Headers', 'Origin, Content-Type, Authorization, Accept')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
     }
 }
