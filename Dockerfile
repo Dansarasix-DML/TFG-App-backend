@@ -1,6 +1,6 @@
-FROM php:8.3-cli
+FROM php:8.3-apache
 
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -16,12 +16,13 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY backend/composer.json backend/composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 COPY backend/ .
 
-RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
+RUN a2enmod rewrite
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "php artisan config:cache && php artisan migrate --force && php -S 0.0.0.0:${PORT:-10000} server.php"]
+CMD ["apache2-foreground"]
