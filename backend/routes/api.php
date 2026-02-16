@@ -62,10 +62,10 @@ Route::group([
     Route::post('/me', [BlogController::class, 'userBlogs']);
 
 
-    // Route::post('/add', [BlogController::class, 'addBlog']);
-    Route::post('/add', function () {
-        return response()->json(['ok' => true]);
-    });
+    Route::post('/add', [BlogController::class, 'addBlog']);
+    // Route::post('/add', function () {
+    //     return response()->json(['ok' => true]);
+    // });
 
     Route::post('/{blogSlug}', [BlogController::class, 'getBlog']);
     Route::post('/{blogSlug}/edit', [BlogController::class, 'editBlog']);
