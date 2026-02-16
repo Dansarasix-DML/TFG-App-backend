@@ -225,7 +225,13 @@ class BlogController extends Controller
     }
 
     public function addBlog(Request $request) {
-        dd(auth()->user());
+        dd([
+            'user' => auth()->user(),
+            'slug' => $request->input('slug'),
+            'banner' => $request->file('banner_img'),
+            'profile' => $request->file('profile_img'),
+        ]);
+
         $user = auth()->user();
 
         $request['blogger'] = $user->id;

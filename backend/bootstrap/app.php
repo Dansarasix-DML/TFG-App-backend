@@ -13,6 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->use([
+            Log::info('Request headers', $request->headers->all());
+            Log::info('Request method', [$request->getMethod()]);
             // \App\Http\Middleware\NewCors::class,
         ]);
     })
