@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->use([
-            \App\Http\Middleware\LogRequest::class
+            // \App\Http\Middleware\LogRequest::class
             // \App\Http\Middleware\NewCors::class,
         ]);
     })
